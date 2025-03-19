@@ -116,6 +116,49 @@ button:hover {
   }
 }
 
+/* Small mobile devices - enhanced specificity */
+@media screen and (max-width: 480px) {
+  body {
+    background-color: #f8f4e9 !important;
+    font-size: 16px; /* Ensure readable text size */
+  }
+  
+  .container {
+    padding: 0.75rem;
+    width: 100%;
+    max-width: 100%;
+  }
+  
+  button {
+    width: 100%; /* Full width buttons for better touch targets */
+    margin: 0.75rem 0;
+    padding: 1rem;
+    font-size: 1.1rem;
+    display: block;
+  }
+  
+  h1, h2 {
+    text-align: center;
+    margin-bottom: 1rem;
+  }
+  
+  .resources, .actions, .upgrades {
+    margin-bottom: 1.5rem;
+    padding: 1.25rem;
+    width: 100% !important;
+    border-radius: 6px;
+    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.15);
+  }
+  
+  .game-area {
+    display: flex !important;
+    flex-direction: column !important;
+    padding: 0.5rem;
+    width: 100%;
+    gap: 0.5rem;
+  }
+}
+
 /* iOS Safari specific fixes */
 @supports (-webkit-touch-callout: none) {
   html, body {
