@@ -3,12 +3,13 @@
   box-sizing: border-box;
   margin: 0;
   padding: 0;
-  -webkit-tap-highlight-color: transparent; /* Removes tap highlight on iOS */
+  -webkit-tap-highlight-color: transparent; /* Removes tap highlight on all mobile devices */
 }
 
 html {
   height: 100%;
   width: 100%;
+  touch-action: manipulation; /* Prevents delays on touch devices */
 }
 
 body {
@@ -16,18 +17,31 @@ body {
   line-height: 1.6;
   color: #333;
   background-color: #f8f4e9; /* Coffee-themed light background */
-  -webkit-text-size-adjust: 100%; /* Prevents font scaling in landscape on iOS */
+  -webkit-text-size-adjust: 100%; /* Prevents font scaling */
   min-height: 100%;
   width: 100%;
   position: relative;
-  overflow-x: hidden; /* Prevent horizontal scroll on mobile */
+  overflow: hidden; /* Prevent scroll on game screens */
 }
 
+/* Ensure the render div (for THREE.js) works on all devices */
+#renderDiv {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+/* Game UI Container - Positioned over the render area */
 .container {
   width: 100%;
   max-width: 1200px;
   margin: 0 auto;
   padding: 1rem;
+  position: relative;
+  z-index: 2;
 }
 
 /* Game elements */
@@ -58,17 +72,25 @@ button {
   margin: 0.5rem 0;
   transition: background-color 0.2s;
   min-height: 44px; /* Minimum touch target size */
+  min-width: 44px; /* Ensure minimum touch target width too */
   -webkit-appearance: none; /* Fixes rendering on iOS */
   -moz-appearance: none;
   appearance: none;
   touch-action: manipulation; /* Improves touch response */
 }
 
-button:hover {
+button:hover, button:active {
   background-color: #5a3c25;
 }
 
-/* Mobile-first responsive design */
+/* Touch-optimized active state for all mobile devices */
+button:active {
+  opacity: 0.8;
+  transform: scale(0.98);
+}
+
+/* Universal responsive approach for all mobile devices */
+/* Larger screens */
 @media (min-width: 768px) {
   .game-area {
     flex-direction: row;
@@ -81,14 +103,16 @@ button:hover {
   }
 }
 
-/* Small mobile devices */
-@media (max-width: 480px) {
+/* All mobile devices */
+@media (max-width: 767px) {
   body {
-    background-color: #f8f4e9 !important;
+    font-size: 16px;
   }
   
   .container {
     padding: 0.75rem;
+    width: 100%;
+    max-width: 100%;
   }
   
   button {
@@ -100,6 +124,7 @@ button:hover {
   
   h1, h2 {
     text-align: center;
+    margin-bottom: 1rem;
   }
   
   .resources, .actions, .upgrades {
@@ -107,75 +132,29 @@ button:hover {
     padding: 1.25rem;
     width: 100%;
     border-radius: 6px;
+    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.15);
   }
   
   .game-area {
-    display: flex !important;
-    flex-direction: column !important;
+    display: flex;
+    flex-direction: column;
     padding: 0.5rem;
+    width: 100%;
+    gap: 0.5rem;
   }
 }
 
-/* iOS Safari specific fixes */
-@supports (-webkit-touch-callout: none) {
+/* Fix for all mobile viewports (both iOS and Android) */
+@media screen and (max-width: 100vh) {
   html, body {
-    /* Fix for iOS Safari viewport height issue */
     height: 100%;
-    background-color: #f8f4e9;
+    overflow: hidden;
   }
   
   body {
-    min-height: -webkit-fill-available;
-  }
-  
-  .resources, .actions, .upgrades {
-    background-color: #fff !important;
-  }
-  
-  .game-area {
-    /* Additional padding to prevent elements being cut off */
-    padding-bottom: 70px;
-  }
-}
-
-/* Ensure content remains visible on Safari */
-@media not all and (min-resolution:.001dpcm) { 
-  @supports (-webkit-appearance:none) {
-    html, body {
-      background-color: #f8f4e9 !important;
-    }
-    
-    .game-area {
-      display: flex !important;
-    }
-    
-    .resources, .actions, .upgrades {
-      opacity: 1 !important;
-      visibility: visible !important;
-      background-color: #fff !important;
-    }
-  }
-}
-
-/* Android specific fixes */
-@supports (-webkit-overflow-scrolling: touch) {
-  body {
-    background-color: #f8f4e9 !important;
-  }
-  
-  .resources, .actions, .upgrades {
-    background-color: #fff !important;
-    width: 100% !important;
-    margin-bottom: 1rem !important;
-  }
-  
-  button:active {
-    opacity: 0.8; /* Provide feedback on press */
-  }
-  
-  .game-area {
-    width: 100% !important;
-    padding: 0.5rem;
+    height: 100vh; /* Fallback */
+    height: -webkit-fill-available;
+    height: fill-available;
   }
 }
 
@@ -195,4 +174,18 @@ button:hover {
 /* Ensure adequate spacing between clickable elements */
 .clickable {
   margin-bottom: 1rem;
+  min-height: 44px;
+}
+
+/* Remove platform-specific sections and use universal approach instead */
+/* Keep only these essentials: */
+
+/* Safe area inset support for notched phones */
+@supports (padding: max(0px)) {
+  body {
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
+    padding-top: env(safe-area-inset-top);
+    padding-bottom: env(safe-area-inset-bottom);
+  }
 }
