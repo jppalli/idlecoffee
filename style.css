@@ -6,13 +6,18 @@
   -webkit-tap-highlight-color: transparent; /* Removes tap highlight on iOS */
 }
 
+html {
+  height: 100%;
+  width: 100%;
+}
+
 body {
   font-family: 'Arial', sans-serif;
   line-height: 1.6;
   color: #333;
   background-color: #f8f4e9; /* Coffee-themed light background */
   -webkit-text-size-adjust: 100%; /* Prevents font scaling in landscape on iOS */
-  height: 100%;
+  min-height: 100%;
   width: 100%;
   position: relative;
   overflow-x: hidden; /* Prevent horizontal scroll on mobile */
@@ -30,6 +35,7 @@ body {
   display: flex;
   flex-direction: column;
   gap: 1rem;
+  padding-bottom: 2rem;
 }
 
 .resources, .actions, .upgrades {
@@ -37,6 +43,8 @@ body {
   border-radius: 8px;
   padding: 1rem;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  margin-bottom: 1rem;
+  width: 100%;
 }
 
 button {
@@ -75,6 +83,14 @@ button:hover {
 
 /* Small mobile devices */
 @media (max-width: 480px) {
+  body {
+    background-color: #f8f4e9 !important;
+  }
+  
+  .container {
+    padding: 0.75rem;
+  }
+  
   button {
     width: 100%; /* Full width buttons for better touch targets */
     margin: 0.75rem 0;
@@ -88,26 +104,47 @@ button:hover {
   
   .resources, .actions, .upgrades {
     margin-bottom: 1.5rem;
-    padding: 1.5rem;
+    padding: 1.25rem;
+    width: 100%;
+    border-radius: 6px;
+  }
+  
+  .game-area {
+    display: flex !important;
+    flex-direction: column !important;
+    padding: 0.5rem;
   }
 }
 
 /* iOS Safari specific fixes */
 @supports (-webkit-touch-callout: none) {
-  body {
+  html, body {
     /* Fix for iOS Safari viewport height issue */
+    height: 100%;
+    background-color: #f8f4e9;
+  }
+  
+  body {
     min-height: -webkit-fill-available;
+  }
+  
+  .resources, .actions, .upgrades {
+    background-color: #fff !important;
   }
   
   .game-area {
     /* Additional padding to prevent elements being cut off */
-    padding-bottom: 50px;
+    padding-bottom: 70px;
   }
 }
 
 /* Ensure content remains visible on Safari */
 @media not all and (min-resolution:.001dpcm) { 
   @supports (-webkit-appearance:none) {
+    html, body {
+      background-color: #f8f4e9 !important;
+    }
+    
     .game-area {
       display: flex !important;
     }
@@ -115,14 +152,30 @@ button:hover {
     .resources, .actions, .upgrades {
       opacity: 1 !important;
       visibility: visible !important;
+      background-color: #fff !important;
     }
   }
 }
 
 /* Android specific fixes */
 @supports (-webkit-overflow-scrolling: touch) {
+  body {
+    background-color: #f8f4e9 !important;
+  }
+  
+  .resources, .actions, .upgrades {
+    background-color: #fff !important;
+    width: 100% !important;
+    margin-bottom: 1rem !important;
+  }
+  
   button:active {
     opacity: 0.8; /* Provide feedback on press */
+  }
+  
+  .game-area {
+    width: 100% !important;
+    padding: 0.5rem;
   }
 }
 
